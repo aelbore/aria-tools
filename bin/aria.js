@@ -2,13 +2,13 @@
 
 const path = require('path')
 
-const program = require('commander');
+const program = require('commander')
 const pkg = require('../package.json')
+
+const Server = require('karma').Server
 
 // >> aria test demo --no-recursive --extname .test.ts
 // >> aria serve --test-coverage --open
-
-require('ts-node').register({ skipProject: true })
 
 program
   .version(pkg.version)
@@ -46,7 +46,11 @@ program
           process.env.KARMA_FILES = path.join(
             testParams.dir, testParams.recursive, `*${testParams.extname}`
           )
-          require('../packages/test/test')       
+          const { configs, PLUGINS, CUSTOM_PREPROCESSORS } = require(pkg.paths.test)
+          const server = new Server({ 
+            ...configs, ...PLUGINS, ...CUSTOM_PREPROCESSORS, singleRun: true 
+          }) 
+          server.start()
         break;
         case 'serve': 
           if (options.testCoverage) {

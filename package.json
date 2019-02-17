@@ -2,9 +2,9 @@
   "name": "aria-tools",
   "version": "0.0.1",
   "description": "CLI for commonly use dev tools (test, build, serve, coverage)",
-  "main": "index.js",
+  "main": "./bin/aria.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "ts-node build.ts"
   },
   "bin": {
     "aria": "./bin/aria.js"
@@ -13,7 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/aelbore/aria-tools.git"
   },
-  "author": "",
+  "author": "Arjay Elbore",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/aelbore/aria-tools/issues"
@@ -21,6 +21,9 @@
   "homepage": "https://github.com/aelbore/aria-tools#readme",
   "peerDependencies": {
     "typescript": "^3.3.3"
+  },
+  "paths": {
+    "test": "../dist/test/test"
   },
   "dependencies": {
     "aria-fs": "0.0.3",

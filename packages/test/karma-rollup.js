@@ -52,4 +52,4 @@ function createPreprocessor(preconfig, config, emitter, logger) {
 
 createPreprocessor.$inject = ["args", "config", "emitter", "logger"];
 
-module.exports = { "preprocessor:rollup": ["factory", createPreprocessor] };
+module.exports = { "preprocessor:rollup": ["factory", createPreprocessor] }
