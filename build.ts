@@ -1,12 +1,12 @@
-import * as path from 'path'
-import * as fs from 'fs'
-import * as util from 'util'
+const path = require('path')
+const fs = require('fs')
 
-import { clean, mkdirp, globFiles } from 'aria-fs';
-import { rollup } from 'rollup';
+const { promisify } = require('util')
+const { clean, mkdirp, globFiles } = require('aria-fs')
+const { rollup } = require('rollup')
 
-const copyFile = util.promisify(fs.copyFile)
-const writeFile = util.promisify(fs.writeFile)
+const copyFile = promisify(fs.copyFile)
+const writeFile = promisify(fs.writeFile)
 
 const DIST_PATH = path.join('dist', 'test')
 const ENTRY_FILE = 'packages/test/index.ts'
@@ -46,7 +46,7 @@ const rollupConfig = {
   } 
 }
 
-async function rollupBuild({ inputOptions, outputOptions }): Promise<any> {
+async function rollupBuild({ inputOptions, outputOptions }) {
   return rollup(inputOptions).then(bundle => bundle.write(outputOptions));
 }
 
@@ -59,7 +59,7 @@ async function copyBinFiles() {
   }))
 }
 
-function copyKarmaRollup() {
+async function copyKarmaRollup() {
   const KARMA_ROLLUP_PREPROCESSOR = path.join('packages', 'test', 'karma-rollup.js')
   return copyFile(
     KARMA_ROLLUP_PREPROCESSOR, 
@@ -67,7 +67,7 @@ function copyKarmaRollup() {
   ) 
 }
 
-function copyPackageJson() {
+async function copyPackageJson() {
   const pkg = require('./package.json');
   pkg.paths.test = '../test/test'
   delete pkg.scripts;
