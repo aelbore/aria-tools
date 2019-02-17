@@ -3,8 +3,8 @@
   const { existsSync } = require('fs')
   const { symlinkDir } = require('aria-fs')
 
-  const NODE_MODULES = join(__dirname, 'node_modules')
+  const NODE_MODULES = resolve(join(__dirname, 'node_modules'))
   if (!(existsSync(NODE_MODULES))) {
-    await symlinkDir(resolve('../node_modules'), NODE_MODULES)
-  }
+    await symlinkDir(resolve('../'), NODE_MODULES)
+  } 
 })()
