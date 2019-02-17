@@ -4,6 +4,7 @@
   "description": "CLI for commonly use dev tools (test, build, serve, coverage)",
   "main": "./bin/aria.js",
   "scripts": {
+    "postinstall": "npm run build",
     "build": "ts-node build.ts"
   },
   "bin": {
@@ -32,12 +33,13 @@
     "jasmine-core": "^3.3.0",
     "karma": "^4.0.0",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-coverage-istanbul-reporter": "^2.0.4",
+    "karma-coverage-istanbul-reporter": "^2.0.5",
     "karma-jasmine": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "rollup": "^1.1.2",
+    "rollup": "^1.2.0",
     "rollup-plugin-istanbul": "^2.0.1",
     "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-terser": "^4.0.4",
     "rollup-plugin-typescript2": "^0.19.2",
     "ts-node": "^8.0.2",
     "tslib": "^1.9.3"
