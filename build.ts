@@ -29,8 +29,7 @@ const rollupConfig = {
             module: 'esNext', 
             moduleResolution: 'node',
             lib: [ "dom", "es2015", "es2017" ]
-          },
-          include: [ ENTRY_FILE ]
+          }
         },
         check: false,
         cacheRoot: path.join(path.resolve(), 'node_modules/.tmp/.rts2_cache'), 
