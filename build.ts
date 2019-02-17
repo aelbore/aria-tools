@@ -1,41 +1,33 @@
-const path = require('path')
-const fs = require('fs')
+import * as path from 'path'
+import * as fs from 'fs'
 
-const { promisify } = require('util')
-const { clean, mkdirp, globFiles } = require('aria-fs')
-const { rollup } = require('rollup')
+import { promisify } from 'util'
+import { clean } from 'aria-fs'
+
+import { ROLLUP_TYPSCRIPT_OPTIONS, typescript2, resolve } from './packages/test/utils'
+import { rollupBuild, copyBinFiles, copyPackageJson, copyReadme } from './packages/common';
 
 const copyFile = promisify(fs.copyFile)
-const writeFile = promisify(fs.writeFile)
 
 const DIST_PATH = path.join('dist', 'test')
-const ENTRY_FILE = 'packages/test/index.ts'
+const TEST_PACKAGE = path.join('packages', 'test')
 
-const typescript2 = require('rollup-plugin-typescript2');
-const resolve = require('rollup-plugin-node-resolve');
+const ENTRY_FILE = path.join(TEST_PACKAGE, 'index.ts')
 
 const rollupConfig = {
   inputOptions: {
     treeshake: true,
     input: ENTRY_FILE,
     external: [
-      'path'
+      'path',
+      'rollup',
+      'rollup-plugin-istanbul',
+      'rollup-plugin-typescript2',
+      'rollup-plugin-node-resolve'
     ],
     plugins: [
-      typescript2({
-        tsconfigDefaults: { 
-          compilerOptions: { 
-            target: 'es2015', 
-            module: 'esNext', 
-            moduleResolution: 'node',
-            lib: [ "dom", "es2015", "es2017" ]
-          }
-        },
-        check: false,
-        cacheRoot: path.join(path.resolve(), 'node_modules/.tmp/.rts2_cache'), 
-        useTsconfigDeclarationDir: true
-      }),         
-      resolve(),
+      typescript2({ ...ROLLUP_TYPSCRIPT_OPTIONS }),         
+      resolve()
     ]
   },
   outputOptions: {
@@ -45,35 +37,11 @@ const rollupConfig = {
   } 
 }
 
-async function rollupBuild({ inputOptions, outputOptions }) {
-  return rollup(inputOptions).then(bundle => bundle.write(outputOptions));
-}
-
-async function copyBinFiles() {
-  const files = await globFiles('bin/**/*')
-  return Promise.all(files.map(file => {
-    const destFile = file.replace(path.resolve(), 'dist') 
-    mkdirp(path.dirname(destFile))
-    return copyFile(file, destFile)
-  }))
-}
-
 async function copyKarmaRollup() {
-  const KARMA_ROLLUP_PREPROCESSOR = path.join('packages', 'test', 'karma-rollup.js')
-  return copyFile(
-    KARMA_ROLLUP_PREPROCESSOR, 
-    path.join('dist', 'test', 'karma-rollup.js')
-  ) 
-}
-
-async function copyPackageJson() {
-  const pkg = require('./package.json');
-  pkg.paths.test = '../test/test'
-  delete pkg.scripts;
-  delete pkg.devDependencies;
-  return writeFile(path.join('dist', 'package.json'), JSON.stringify(pkg, null, 2))
+  const { join } = path, FILE_NAME = 'karma-rollup.js'
+  return copyFile(join(TEST_PACKAGE, FILE_NAME), join(DIST_PATH, FILE_NAME)) 
 }
 
 clean('dist')
   .then(() => rollupBuild(rollupConfig))
-  .then(() => Promise.all([ copyPackageJson(), copyKarmaRollup(), copyBinFiles() ]))
+  .then(() => Promise.all([ copyPackageJson(), copyKarmaRollup(), copyBinFiles(), copyReadme() ]))

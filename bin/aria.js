@@ -24,12 +24,12 @@ program
             const { clean } = require('aria-fs');
             clean(dir)
           }
+        break;
         case 'mkdir':
           if (dir) {
             const { mkdirp } = require('aria-fs');
             mkdirp(dir)
           }
-          break;
         break;
         case 'test':
           const testParams = {

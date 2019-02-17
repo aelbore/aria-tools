@@ -1,5 +1,5 @@
-import { SPEC_FILES, COVERAGE_DEST } from "./utils";
-import { rollupPreprocessors } from "./rollup-typescript";
+import { SPEC_FILES, COVERAGE_DEST } from './utils';
+import { rollupPreprocessors } from './rollup-typescript';
 
 export const configs = { 
   frameworks: [ 'jasmine' ],
