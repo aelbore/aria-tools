@@ -4,7 +4,7 @@
   "description": "CLI for commonly use dev tools (test, build, serve, coverage)",
   "main": "./bin/aria.js",
   "scripts": {
-    "postinstall": "node symlink.js && npm run build",
+    "postinstall": "node symlink.js",
     "build": "ts-node build.ts"
   },
   "bin": {
