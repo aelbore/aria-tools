@@ -1,11 +1,11 @@
-import * as path from 'path'
-import * as fs from 'fs'
+const path = require('path')
+const fs = require('fs')
 
-import { promisify } from 'util'
-import { clean } from 'aria-fs'
+const { promisify } = require('util')
+const { clean }= require('aria-fs')
 
-import { ROLLUP_TYPSCRIPT_OPTIONS, typescript2, resolve } from './packages/test/utils'
-import { rollupBuild, copyBinFiles, copyPackageJson, copyReadme } from './packages/common';
+const { ROLLUP_TYPESCRIPT_OPTIONS, typescript2, resolve } = require('./packages/test/utils')
+const { rollupBuild, copyBinFiles, copyPackageJson, copyReadme } = require('./packages/common/index')
 
 const copyFile = promisify(fs.copyFile)
 
@@ -26,7 +26,7 @@ const rollupConfig = {
       'rollup-plugin-node-resolve'
     ],
     plugins: [
-      typescript2({ ...ROLLUP_TYPSCRIPT_OPTIONS }),         
+      typescript2({ ...ROLLUP_TYPESCRIPT_OPTIONS }),         
       resolve()
     ]
   },

@@ -1,4 +1,4 @@
-import { SPEC_FILES, ROLLUP_TYPSCRIPT_OPTIONS, istanbul, typescript2, resolve } from './utils'
+import { SPEC_FILES, ROLLUP_TYPESCRIPT_OPTIONS, istanbul, typescript2, resolve } from './utils'
 
 const istanbulConfig = {
   exclude: [ SPEC_FILES, "node_modules/**/*" ]
@@ -9,7 +9,7 @@ export const rollupPreprocessors = {
     base: 'rollup',
     options: {
       plugins: [
-        typescript2({ ...ROLLUP_TYPSCRIPT_OPTIONS }),
+        typescript2({ ...ROLLUP_TYPESCRIPT_OPTIONS }),
         istanbul(istanbulConfig),      
         resolve()
       ],

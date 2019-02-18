@@ -14,7 +14,7 @@ export const SPEC_FILES = process.env.KARMA_FILES
 
 export const COVERAGE_DEST = path.resolve('node_modules/.tmp/coverage')
 
-export const ROLLUP_TYPSCRIPT_OPTIONS = {
+export const ROLLUP_TYPESCRIPT_OPTIONS = {
   tsconfigDefaults: { 
     compilerOptions: {
       "baseUrl": ".",
