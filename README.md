@@ -20,8 +20,6 @@ Usage
   ```
   aria test <dir>
   ```
-  <br />
-  
   * custom extension name of your spec files
     <br />
     
@@ -41,9 +39,5 @@ Demo
 ----
 * [ Jasmine ](https://github.com/aelbore/aria-tools/tree/master/demo/jasmine/custom-elements)
 * [ Mocha-Chai ](https://github.com/aelbore/aria-tools/tree/master/demo/mocha/custom-elements)
-
-
-
-
 
 
