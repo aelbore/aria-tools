@@ -20,6 +20,4 @@ describe('Counter', () => {
     expect(element.shadowRoot).toBeDefined()
   })
 
-  
-
 })

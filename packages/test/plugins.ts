@@ -1,9 +1,11 @@
 export const PLUGINS = {
   plugins: [
-    require('karma-jasmine'),
-    require('karma-mocha-reporter'),
-    require('karma-chrome-launcher'),
-    require('karma-coverage-istanbul-reporter'),
-    require('./karma-rollup')
+    'karma-mocha',
+    'karma-chai',
+    'karma-jasmine',
+    'karma-mocha-reporter',
+    'karma-chrome-launcher',
+    'karma-coverage-istanbul-reporter',
+    './karma-rollup'
   ]
 }

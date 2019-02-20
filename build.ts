@@ -23,6 +23,8 @@ const rollupConfig = {
     input: ENTRY_FILE,
     external: [
       'path',
+      'fs',
+      'http',
       'rollup',
       'rollup-plugin-istanbul',
       'rollup-plugin-typescript2',

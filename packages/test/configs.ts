@@ -1,35 +1,119 @@
-import { SPEC_FILES, COVERAGE_DEST } from './utils';
-import { rollupPreprocessors } from './rollup-typescript';
+import * as path from 'path'
+import { transformer } from './transformer';
 
-export const configs = { 
-  frameworks: [ 'jasmine' ],
+const istanbul = require('rollup-plugin-istanbul');
+const typescript2 = require('rollup-plugin-typescript2');
+const resolve = require('rollup-plugin-node-resolve');
 
-  preprocessors: {
-    [SPEC_FILES]: [ ...Object.keys(rollupPreprocessors) ]
-  },
+export const DEFAULT_SPEC_FILES = 'src/**/*.spec.ts'
 
-  files: [
-    { pattern: SPEC_FILES }
+export const COVERAGE_DEST = path.resolve('node_modules/.tmp/coverage')
+
+export interface KarmaConfigOptions {
+  specFiles: string;
+  frameworks?: Array<string>;
+  plugins?: Array<string>;
+}
+
+export const ROLLUP_TYPESCRIPT_OPTIONS = {
+  transformers: [ 
+    () => ({
+      before: [ transformer() ],
+      after: []
+    })
   ],
-
-  coverageIstanbulReporter: {
-    reports: [ 'lcov', 'text-summary' ],
-    dir: COVERAGE_DEST
-  },
-
-  reporters: [ 'mocha', 'coverage-istanbul' ],
-
-  browsers: ['ChromeHeadlessNoSandbox'],
-
-  customLaunchers: {
-    ChromeHeadlessNoSandbox: {
-      base: 'ChromeHeadless',
-      flags: ['--no-sandbox']
+  tsconfigDefaults: { 
+    compilerOptions: {
+      "baseUrl": ".",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "target": "es2015", 
+      "module": "es2015", 
+      "moduleResolution": "node",           
+      "lib": [ 
+        "dom", 
+        "es2015", 
+        "es2017"  
+      ],
+      "typeRoots": [ "node_modules/@types" ]  
     }
   },
+  check: false,
+  cacheRoot: path.join(path.resolve(), 'node_modules/.tmp/.rts2_cache'), 
+  useTsconfigDeclarationDir: true
+}
 
-  mime: {
-    "text/x-typescript": ["ts"]
+export function karmaConfig(options: KarmaConfigOptions) {
+  const { frameworks, specFiles, plugins } = options;
+
+  const testFiles = specFiles.replace('.spec.ts', '.test.ts')
+
+  const configs = {
+    files: [
+      { pattern: specFiles }
+    ],
+
+    frameworks: [ ...frameworks ],
+
+    plugins: plugins.map(plugin => require(plugin)),
+
+    preprocessors: {
+      [specFiles]: [ 'rollupNode' ],
+      [testFiles]: [ 'rollupNode' ]
+    },
+
+    customPreprocessors: {
+      rollupNode: {
+        base: 'rollup',
+        options: {
+          plugins: [
+            typescript2({ ...ROLLUP_TYPESCRIPT_OPTIONS  }),
+            istanbul({ exclude: [ specFiles, "node_modules/**/*" ] }),      
+            resolve()
+          ],
+          output: {
+            format: "iife", 
+            sourcemap: false
+          }
+        }
+      }
+    },
+
+    reporters: [ 'mocha', 'coverage-istanbul' ],
+
+    browsers: ['ChromeHeadlessNoSandbox'],
+
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
+    },
+
+    coverageIstanbulReporter: {
+      reports: [ 'lcov', 'text-summary' ],
+      dir: COVERAGE_DEST,
+      combineBrowserReports: true,
+      skipFilesWithNoCoverage: true,
+      thresholds: {
+        global: {
+          statements: 70,
+          branches: 70,
+          functions: 70,
+          lines: 70,
+        }
+      }
+    },
+
+    mime: {
+      "text/x-typescript": ["ts"]
+    },
+
+    singleRun: true,
+    concurrency: Infinity
   }
 
+  return {
+    ...configs
+  }
 }

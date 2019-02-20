@@ -5,10 +5,10 @@ const path = require('path')
 const program = require('commander')
 const pkg = require('../package.json')
 
-const Server = require('karma').Server
-
-// >> aria test demo --no-recursive --extname .test.ts
-// >> aria serve --test-coverage --open
+const COMMAND = Object.freeze({
+  TEST: 'test',
+  SERVE: 'serve'
+})
 
 program
   .version(pkg.version)
@@ -19,19 +19,7 @@ program
   .action(function (command, dir, options) {
     if (command) {
       switch (command) {
-        case 'rmdir':
-          if (dir) {
-            const { clean } = require('aria-fs');
-            clean(dir)
-          }
-        break;
-        case 'mkdir':
-          if (dir) {
-            const { mkdirp } = require('aria-fs');
-            mkdirp(dir)
-          }
-        break;
-        case 'test':
+        case COMMAND.TEST:
           const testParams = {
             dir: dir ? dir: 'src',
             recursive: '**',
@@ -46,15 +34,14 @@ program
           process.env.KARMA_FILES = path.join(
             testParams.dir, testParams.recursive, `*${testParams.extname}`
           )
-          const { configs, PLUGINS, CUSTOM_PREPROCESSORS } = require(pkg.paths.test)
-          const server = new Server({ 
-            ...configs, ...PLUGINS, ...CUSTOM_PREPROCESSORS, singleRun: true 
-          }) 
+          const Server = require('karma').Server
+          const { configs } = require(pkg.paths.test)
+          const server = new Server({ ...configs(process.env.KARMA_FILES) }) 
           server.start()
         break;
-        case 'serve': 
+        case COMMAND.SERVE: 
           if (options.testCoverage) {
-            require('../packages/test/serve')
+            require(pkg.paths.test).serveCoverage()
           }
         break;
       }
