@@ -4,6 +4,7 @@ import { transformer } from './transformer';
 const istanbul = require('rollup-plugin-istanbul');
 const typescript2 = require('rollup-plugin-typescript2');
 const resolve = require('rollup-plugin-node-resolve');
+const commonjs = require('rollup-plugin-commonjs')
 
 export const DEFAULT_SPEC_FILES = 'src/**/*.spec.ts'
 
@@ -69,8 +70,13 @@ export function karmaConfig(options: KarmaConfigOptions) {
           plugins: [
             typescript2({ ...ROLLUP_TYPESCRIPT_OPTIONS  }),
             istanbul({ exclude: [ specFiles, "node_modules/**/*" ] }),      
-            resolve()
+            resolve(),
+            commonjs()
           ],
+          onwarn (warning) {
+            if (warning.code === 'THIS_IS_UNDEFINED') { return; }
+            console.log("Rollup warning: ", warning.message);
+          },
           output: {
             format: "iife", 
             sourcemap: false
