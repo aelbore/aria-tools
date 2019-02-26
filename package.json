@@ -30,6 +30,7 @@
     "test": "../dist/test/test"
   },
   "dependencies": {
+    "@webcomponents/custom-elements": "^1.2.1",
     "aria-fs": "0.0.3",
     "chai": "^4.2.0",
     "commander": "^2.19.0",

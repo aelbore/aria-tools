@@ -51,6 +51,7 @@ export function karmaConfig(options: KarmaConfigOptions) {
 
   const configs = {
     files: [
+      "node_modules/@webcomponents/custom-elements/src/native-shim.js",
       { pattern: specFiles }
     ],
 
