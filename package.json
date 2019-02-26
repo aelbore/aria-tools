@@ -1,6 +1,6 @@
 {
   "name": "aria-tools",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "CLI for commonly use dev tools (test, build, serve, coverage)",
   "main": "./bin/aria.js",
   "scripts": {
