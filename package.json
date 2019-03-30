@@ -1,10 +1,10 @@
 {
   "name": "aria-tools",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "CLI for commonly use dev tools (test, build, serve, coverage)",
   "main": "./bin/aria.js",
   "scripts": {
-    "postinstall": "node symlink.js && npm run build && ts-node clean.ts",
+    "postinstall": "node symlink.js && npm run build",
     "build": "ts-node build.ts",
     "test.jasmine": "./dist/bin/aria.js test demo/jasmine",
     "test.mocha": "./dist/bin/aria.js test demo/mocha",
