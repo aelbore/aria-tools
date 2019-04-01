@@ -1,10 +1,21 @@
 import * as path from 'path'
+import * as fs from 'fs'
 import { transformer } from './transformer';
 
 const istanbul = require('rollup-plugin-istanbul');
 const typescript2 = require('rollup-plugin-typescript2');
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs')
+
+const ARIA_CONFIG_PATH = path.resolve('.aria.config.js')
+
+let rollupPlugins = []
+if (fs.existsSync(ARIA_CONFIG_PATH)) {
+  const ariaConfig = require(ARIA_CONFIG_PATH)
+  if (ariaConfig && ariaConfig.rollupPlugins && Array.isArray(ariaConfig.rollupPlugins)) {
+    rollupPlugins = [ ...ariaConfig.rollupPlugins ]
+  }
+}
 
 export const DEFAULT_SPEC_FILES = 'src/**/*.spec.ts'
 
@@ -69,6 +80,7 @@ export function karmaConfig(options: KarmaConfigOptions) {
         base: 'rollup',
         options: {
           plugins: [
+            ...rollupPlugins,
             typescript2({ ...ROLLUP_TYPESCRIPT_OPTIONS  }),
             istanbul({ exclude: [ specFiles, "node_modules/**/*" ] }),      
             resolve(),

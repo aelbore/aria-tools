@@ -78,7 +78,7 @@ async function copyPackageJson() {
   return writeFile(join('dist', 'package.json'), JSON.stringify(pkg, null, 2))
 }
 
- async function copyReadme() {
+async function copyReadme() {
   const README = 'README.md'
   return copyFile(resolve(README), resolve(join('dist', README)))
 }
