@@ -1,5 +1,5 @@
 
-const { rollup } = require('rollup');
+const { rollup } = require('aria-build')
 
 function createPreprocessor(preconfig, config, emitter, logger) {
   const cache = new Map();

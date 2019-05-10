@@ -1,6 +1,6 @@
 
-const cssTransform = require('lit-custom-element/plugins/style-transform')
+const { inlineCustomElement } = require('lit-custom-element/plugins/inline-plugin')
 
 exports.rollupPlugins = [ 
-  cssTransform() 
+  inlineCustomElement()
 ]

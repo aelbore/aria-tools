@@ -1,11 +1,10 @@
 import * as path from 'path'
 import * as fs from 'fs'
+
+import { createTSConfig, commonjs, onwarn, typescript2, nodeResolve  } from 'aria-build'
 import { transformer } from './transformer';
 
 const istanbul = require('rollup-plugin-istanbul');
-const typescript2 = require('rollup-plugin-typescript2');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs')
 
 const ARIA_CONFIG_PATH = path.resolve('.aria.config.js')
 
@@ -13,7 +12,9 @@ let rollupPlugins = []
 if (fs.existsSync(ARIA_CONFIG_PATH)) {
   const ariaConfig = require(ARIA_CONFIG_PATH)
   if (ariaConfig && ariaConfig.rollupPlugins && Array.isArray(ariaConfig.rollupPlugins)) {
-    rollupPlugins = [ ...ariaConfig.rollupPlugins ]
+    rollupPlugins = [ 
+      ...ariaConfig.rollupPlugins 
+    ]
   }
 }
 
@@ -25,34 +26,6 @@ export interface KarmaConfigOptions {
   specFiles: string;
   frameworks?: Array<string>;
   plugins?: Array<string>;
-}
-
-export const ROLLUP_TYPESCRIPT_OPTIONS = {
-  transformers: [ 
-    () => ({
-      before: [ transformer() ],
-      after: []
-    })
-  ],
-  tsconfigDefaults: { 
-    compilerOptions: {
-      "baseUrl": ".",
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "target": "es2015", 
-      "module": "es2015", 
-      "moduleResolution": "node",           
-      "lib": [ 
-        "dom", 
-        "es2015", 
-        "es2017"  
-      ],
-      "typeRoots": [ "node_modules/@types" ]  
-    }
-  },
-  check: false,
-  cacheRoot: path.join(path.resolve(), 'node_modules/.tmp/.rts2_cache'), 
-  useTsconfigDeclarationDir: true
 }
 
 export function karmaConfig(options: KarmaConfigOptions) {
@@ -81,15 +54,16 @@ export function karmaConfig(options: KarmaConfigOptions) {
         options: {
           plugins: [
             ...rollupPlugins,
-            typescript2({ ...ROLLUP_TYPESCRIPT_OPTIONS  }),
+            typescript2(createTSConfig({ 
+              tsconfig: {
+                transformers: [ transformer() ]
+              }
+            })),
             istanbul({ exclude: [ specFiles, "node_modules/**/*" ] }),      
-            resolve(),
+            nodeResolve(),
             commonjs()
           ],
-          onwarn (warning) {
-            if (warning.code === 'THIS_IS_UNDEFINED') { return; }
-            console.log("Rollup warning: ", warning.message);
-          },
+          onwarn,
           output: {
             format: "iife", 
             sourcemap: false
