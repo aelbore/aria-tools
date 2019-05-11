@@ -1,6 +1,6 @@
 {
   "name": "aria-tools",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "CLI for commonly use dev tools (test, build, serve, coverage)",
   "main": "./bin/aria.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/aelbore/aria-tools#readme",
   "peerDependencies": {
-    "typescript": "^3.3.3"
+    "typescript": "^3.4.5"
   },
   "paths": {
     "test": "../test/test"
