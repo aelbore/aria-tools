@@ -1,3 +1,6 @@
+[![npm version](https://badge.fury.io/js/aria-tools.svg)](https://www.npmjs.com/package/aria-tools)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 # aria-tools
 Simple testing tools, zero configuration command line interface
 
